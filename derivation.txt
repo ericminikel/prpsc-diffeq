@@ -1,0 +1,129 @@
+mRNA
+====
+
+R(0) = R0
+R(infty) = R1
+
+R(t) = R1 + (R0 - R1)exp(-lambda*t)
+
+PrPC
+====
+
+S'(t) = alpha*R(t) - mu*S(t)
+S(0) = S0
+S(infty) = S1
+steady state so
+S'(0) = 0 = alpha*R0 - mu*S0
+alpha*R0 = mu*S0
+alpha = mu*S0/R0
+
+substitute in R(t)
+S'(t) = alpha*(R1 + (R0-R1)exp(-lambda*t)) - mu*S(t)
+S'(t) = alpha*R1 + alpha*(R0-R1)exp(-lambda*t) - mu*S(t)
+guess S(t) = A + B*exp(-lambda*t) + C*exp(-mu*t)
+differentiate S'(t) = -lambda*B*exp(-lambda*t) + -mu*C*exp(-mu*t)
+set S'(t) = S'(t)
+alpha*R1 + alpha*(R0-R1)exp(-lambda*t) - mu*S(t) = -lambda*B*exp(-lambda*t) + -mu*C*exp(-mu*t)
+recall S(t) = A + B*exp(-lambda*t) + C*exp(-mu*t)
+alpha*R1 + alpha*(R0-R1)exp(-lambda*t) - mu*[A + B*exp(-lambda*t) + C*exp(-mu*t)] = -lambda*B*exp(-lambda*t) + -mu*C*exp(-mu*t)
+(alpha*R1 - mu*A) + (alpha*(R0-R1) - mu*B + lambda*B)*exp(-lambda*t) + (-mu*C + mu*C)*exp(-mu*t) = 0
+
+# A
+alpha*R1 - mu*A = 0
+alpha*R1 = mu*A
+A = alpha*R1 / mu
+alpha = mu*S0/R0
+A = S0*R1/R0
+
+# B
+alpha*(R0-R1) - mu*B + lambda*B = 0
+lambda*B - mu*B = -alpha*(R0 - R1)
+B = -alpha*(R0 - R1) / (lambda - mu)
+B = alpha*(R0 - R1) / (mu - lambda)
+alpha = mu*S0/R0
+B = mu*(S0/R0)*(R0-R1) / (mu-lambda)
+B = S0*(1-R1/R0) / (1-lambda/mu)
+
+
+# C
+(-mu*C + mu*C)*exp(-mu*t) = 0
+0 = 0
+
+S(0) = S0 = A + B*exp(-lambda*0) + C*exp(-mu*0)
+S0 = A + B + C
+C = S0 - A - B
+C = S0 - S0*R1/R0 - S0*(1-R1/R0) / (1-lambda/mu)
+C = S0( 1 - R1/R0 - (1-R1/R0)/(1-lambda/mu) )
+C = S0( 1 - R1/R0 + (R1/R0 - 1)/(1-lambda/mu) )
+S(infty) = S1 = A + B*0 + C*0 = A
+
+A = alpha*R1 / mu = S1 
+S1 = R1 * (alpha/mu)
+alpha = mu*S0/R0
+S1 = R1 * S0/R0
+S1 = S0 * R1/R0 # ratio of knockdown is same
+
+S(t) = A + B*exp(-lambda*t) + C*exp(-mu*t)
+S(t) = S0*R1/R0 + (S0*(1-R1/R0) / (1-lambda/mu))*exp(-lambda*t) + S0*( 1 - R1/R0 + (R1/R0 - 1)/(1-lambda/mu) )*exp(-mu*t)
+
+special case for mu=lambda:
+S(t) = S0 * R1/R0 + S0 * (1-R1/R0) * (1 + mu * t) * exp(-mu*t)
+
+
+# go back and check that derivative is right
+S(t) = S0*R1/R0 + (S0*(1-R1/R0) / (1-lambda/mu))*exp(-lambda*t) + S0*( 1 - R1/R0 + (R1/R0 - 1)/(1-lambda/mu) )*exp(-mu*t)
+S'(t) = -lambda*(S0*(1-R1/R0) / (1-lambda/mu))*exp(-lambda*t) + -mu*S0*( 1 - R1/R0 + (R1/R0 - 1)/(1-lambda/mu) )*exp(-mu*t)
+
+
+PrPSc
+====
+
+T'(t) = beta*S(t) - v*T(t)
+T(0) = T0
+T(infty) = T1
+steady state so
+T'(0) = 0 = beta*S0 - V*T0
+beta*S0 = v*T0
+beta = v*T0/S0
+
+T(t) = A + B*exp(-lambda*t) + C*exp(-mu*t) + D*exp(-v*t)
+T'(t) = -lambda*B*exp(-lambda*t) - mu*C*exp(-mu*t) - v*D*exp(-v*t)
+and also
+T'(t) = beta*S(t) - v*[A + B*exp(-lambda*t) + C*exp(-mu*t) + D*exp(-v*t)]
+therefore
+beta*S(t) - v*[A + B*exp(-lambda*t) + C*exp(-mu*t) + D*exp(-v*t)] = -lambda*B*exp(-lambda*t) - mu*C*exp(-mu*t) - v*D*exp(-v*t)
+beta*[S0*R1/R0 + (S0*(1-R1/R0) / (1-lambda/mu))*exp(-lambda*t) + S0*( 1 - R1/R0 + (R1/R0 - 1)/(1-lambda/mu) )*exp(-mu*t)] - v*[A + B*exp(-lambda*t) + C*exp(-mu*t) + D*exp(-v*t)] = -lambda*B*exp(-lambda*t) - mu*C*exp(-mu*t) - v*D*exp(-v*t)
+
+# A = Constant terms
+beta*S0*R1/R0 - v*A = 0
+A = beta*S0*(R1/R0) / v
+beta = v*T0/S0
+A = v*(T0/S0)*S0*(R1/R0) / v
+A = T0*R1/R0 # knockdown level is same
+
+# B = exp(-lambda*t) terms
+beta*(S0*(1-R1/R0) / (1-lambda/mu))*exp(-lambda*t) - v*B*exp(-lambda*t) = -lambda*B*exp(-lambda*t)
+beta*(S0*(1-R1/R0) / (1-lambda/mu))*exp(-lambda*t) + lambda*B*exp(-lambda*t) - v*B*exp(-lambda*t) = 0
+beta*(S0*(1-R1/R0) / (1-lambda/mu)) + lambda*B - v*B = 0
+beta*(S0*(1-R1/R0) / (1-lambda/mu)) = v*B - lambda*B
+B = beta*(S0*(1-R1/R0) / (1-lambda/mu))/(v - lambda)
+B = v*(T0/S0)*(S0*(1-R1/R0) / (1-lambda/mu))/(v - lambda)
+
+# C = exp(-mu*t) terms
+beta*S0*( 1 - R1/R0 + (R1/R0 - 1)/(1-lambda/mu) )*exp(-mu*t) - v*C*exp(-mu*t) = -mu*C*exp(-mu*t)
+beta*S0*( 1 - R1/R0 + (R1/R0 - 1)/(1-lambda/mu) )*exp(-mu*t) + mu*C*exp(-mu*t) - v*C*exp(-mu*t) = 0
+beta*S0*( 1 - R1/R0 + (R1/R0 - 1)/(1-lambda/mu) ) + mu*C - v*C = 0
+beta*S0*( 1 - R1/R0 + (R1/R0 - 1)/(1-lambda/mu) ) = v*C - mu*C
+C = beta*S0*( 1 - R1/R0 + (R1/R0 - 1)/(1-lambda/mu) ) / (v - mu)
+beta = v*T0/S0
+C = v*T0*( 1 - R1/R0 + (R1/R0 - 1)/(1-lambda/mu) ) / (v - mu)
+
+# D = exp(-v*t) terms
+-v*D*exp(-v*t) = -v*D*exp(-v*t)
+again, no information about D
+T(infty) = A = T0*R1/R0 # knockdown level is same
+T(0) = T0 = A + B + C + D
+D = T0 - A - B - C
+D = T0 - (T0*R1/R0) - (v*(T0/S0)*(S0*(1-R1/R0) / (1-lambda/mu))/(v - lambda)) - (v*T0*( 1 - R1/R0 + (R1/R0 - 1)/(1-lambda/mu) ) / (v - mu))
+
+T(t) = T0*R1/R0 + (v*(T0/S0)*(S0*(1-R1/R0) / (1-lambda/mu))/(v - lambda))*exp(-lambda*t) + (v*T0*( 1 - R1/R0 + (R1/R0 - 1)/(1-lambda/mu) ) / (v - mu))*exp(-mu*t) + (T0 - (T0*R1/R0) - (v*(T0/S0)*(S0*(1-R1/R0) / (1-lambda/mu))/(v - lambda)) - (v*T0*( 1 - R1/R0 + (R1/R0 - 1)/(1-lambda/mu) ) / (v - mu)))*exp(-v*t)
