@@ -5,7 +5,7 @@
 
 # half lives from literature
 mrna_thalf  = 7  # Pfeiffer 1993  http://www.ncbi.nlm.nih.gov/pubmed/8095862
-prpc_thalf  = 5  # Borcheldt 1990 http://www.ncbi.nlm.nih.gov/pubmed/1968466/
+prpc_thalf  = 5 # Borcheldt 1990 http://www.ncbi.nlm.nih.gov/pubmed/1968466/
 prpsc_thalf = 30 # Peretz 2001    http://www.ncbi.nlm.nih.gov/pubmed/11507642
 
 # values at initial steady state
@@ -18,7 +18,7 @@ hrs = 8*24 # number of hours to model and plot. here, set to 8 days
 # values of parameters, which you can tweak to explore the effects of diff. compounds
 r = l0 * 0.50 # try setting to r0 * 0.50 to reduce transcription rate by half
 l = l0 * 1.00 # try setting to l0 * 2.00 to double the mRNA degradation rate
-a = m0 * 1.00 
+a = m0 * 1.00
 m = m0 * 1.00 
 b = v0 * 1.00
 v = v0 * 1.00
@@ -70,6 +70,10 @@ points(1:hrs,prpc_present,pch=1,col='orange')
 points(1:hrs,prpsc_present,pch=1,col='purple')
 
 ######### analytical solutions #############
+
+# to compare to simulated solutions, plot 1:hrs vs. 0:(hrs-1) because
+# in simulation, knockdown begins at t = 1 hr, while in analytical
+# solution, knockdown begins at t = 0 hr
 
 mrna = function(t) {
   return ( r/l + (R0 - r/l)*exp(-l*t) )
