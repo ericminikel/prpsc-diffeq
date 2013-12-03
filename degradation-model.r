@@ -1,27 +1,29 @@
 # Eric Minikel
 # CureFFI.org
-# 2013-12-02
+# 2013-12-03
 # Comparison of numerically simulated and analytically derived PrP degradation models
 
 # half lives from literature
 mrna_thalf  =  7 # Pfeiffer 1993  http://www.ncbi.nlm.nih.gov/pubmed/8095862
 prpc_thalf  =  5 # Borcheldt 1990 http://www.ncbi.nlm.nih.gov/pubmed/1968466/
 prpsc_thalf = 30 # Peretz 2001    http://www.ncbi.nlm.nih.gov/pubmed/11507642
+division_time = 24 # Ghaemmaghami 2007  http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2084281/
 
 # values at initial steady state
 l0 = log(2) / mrna_thalf  # lambda_0
 m0 = log(2) / prpc_thalf  # mu_0
 v0 = log(2) / prpsc_thalf # nu_0
+xi = log(2) / division_time
 
 hrs = 8*24 # number of hours to model and plot. here, set to 8 days
 
 # values of parameters, which you can tweak to explore the effects of diff. compounds
-r = l0 * 0.50 # try setting to r0 * 0.50 to reduce transcription rate by half
-l = l0 * 1.00 # try setting to l0 * 2.00 to double the mRNA degradation rate
-a = m0 * 1.00
-m = m0 * 1.00 
-b = v0 * 1.00
-v = v0 * 1.00
+r = (l0+xi) * 0.50 # try setting to 0.50 to reduce transcription rate by half
+l = (l0+xi) * 1.00 # try setting to 2.00 to double the mRNA degradation rate
+a = (m0+xi) * 1.00
+m = (m0+xi) * 1.00 
+b = (v0+xi) * 1.00
+v = (v0+xi) * 1.00
 
 # initial steady state
 R0 = 1
@@ -75,7 +77,7 @@ points(1:hrs,prpsc_present,pch=1,col='purple')
 # in simulation, knockdown begins at t = 1 hr, while in analytical
 # solution, knockdown begins at t = 0 hr
 
-mrna = function(t, ...) {
+mrna = function(t) {
   return ( r/l + (R0 - r/l)*exp(-l*t) )
 }
 points(1:hrs, mrna(0:(hrs-1)), type='l', lwd=2, col='red')
@@ -95,6 +97,10 @@ prpsc = function(t) {
   } else  if (m == v) {
     return ( T0*exp(-v*t) + (b*a*r/(l*v^2))*(1-exp(-v*t)) + (b*a*(R0-r/l)/((v-l)^2))*(exp(-l*t)-exp(-v*t)) +
              b*(S0 - a*r/(v*l) - a*(R0 - r/l)/(v-l))*t*exp(-v*t) )
+  } else if (l == m) {
+    stop("I didn't solve those equations.")
+  } else if (l == v) {
+    stop("I didn't solve those equations.")
   } else {
     return ( b*a*r/(v*m*l) + b*a*(R0-r/l)/((v-l)*(m-l))*exp(-l*t) + b*(S0 - a*r/(m*l) - a*(R0-r/l)/(m-l))/(v-m)*exp(-m*t) + 
            (T0 - b*a*r/(v*m*l) - b*a*(R0-r/l)/((v-l)*(m-l)) - b*(S0 - a*r/(m*l) - a*(R0-r/l)/(m-l))/(v-m))*exp(-v*t) )
@@ -107,4 +113,3 @@ legend('topright',c('PrPSc simulated','PrPC simulated','mRNA simulated','PrPSc a
        pch=c(1,1,1,NA,NA,NA), lwd=c(NA,NA,NA,2,2,2))
 
 dev.off()
-
